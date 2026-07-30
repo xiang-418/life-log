@@ -1,0 +1,1242 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>惊鸿小记 · 我的生活记录</title>
+<meta name="theme-color" content="#FAF6F0">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="惊鸿小记">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" href="icon-192.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+[hidden]{display:none!important}
+:root{
+  --bg:#FAF6F0;
+  --card:#FFFFFF;
+  --ink:#4C463F;
+  --soft:#9A8F82;
+  --line:#F1EAE0;
+  --peach:#FF9E8A; --peach-bg:#FFEAE4;
+  --mint:#5FC5A0;  --mint-bg:#E1F6EE;
+  --lav:#A79FE0;   --lav-bg:#EFECFB;
+  --butter:#EEC25C;--butter-bg:#FFF4D6;
+  --sky:#6FA8DC;   --sky-bg:#E4F0FC;
+  --rose:#EE9BBE;  --rose-bg:#FCE7F1;
+  --r:22px;
+}
+html,body{height:100%}
+body{
+  font-family:"PingFang SC","Hiragino Sans GB","Microsoft YaHei",system-ui,sans-serif;
+  background:var(--bg);color:var(--ink);font-size:15px;line-height:1.6;
+}
+.app{display:flex;min-height:100vh}
+
+/* ============ 侧边栏 ============ */
+.sidebar{
+  width:226px;background:var(--card);border-right:1px solid var(--line);
+  padding:26px 14px 20px;display:flex;flex-direction:column;gap:6px;
+  position:sticky;top:0;height:100vh;flex-shrink:0;
+}
+.brand{font-size:20px;font-weight:700;padding:0 10px 18px;display:flex;align-items:center;gap:8px}
+.brand .b-emoji{font-size:26px}
+.nav{display:flex;flex-direction:column;gap:4px;flex:1;overflow-y:auto}
+.nav-item{
+  display:flex;align-items:center;gap:10px;padding:11px 14px;border:none;background:transparent;
+  border-radius:14px;font-size:15px;color:var(--ink);cursor:pointer;text-align:left;
+  transition:background .18s,transform .12s;font-family:inherit;
+}
+.nav-item .n-emoji{font-size:17px;width:22px;text-align:center}
+.nav-item:hover{background:#F7F1E9;transform:translateX(2px)}
+.nav-item.active{background:var(--peach-bg);font-weight:600}
+.side-foot{display:flex;flex-direction:column;gap:8px;padding-top:14px;border-top:1px dashed var(--line)}
+.ghost-btn{
+  border:1px solid var(--line);background:#FDFBF7;border-radius:12px;padding:8px 10px;
+  font-size:13px;color:var(--soft);cursor:pointer;transition:.18s;font-family:inherit;
+}
+.ghost-btn:hover{background:var(--butter-bg);color:var(--ink)}
+.side-tip{font-size:12px;color:#BDB2A4;text-align:center}
+
+/* ============ 主区域 ============ */
+.main{flex:1;padding:34px 40px 60px;overflow-y:auto}
+.page{display:none;max-width:860px;margin:0 auto;animation:fade .3s ease}
+.page.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.page-title{font-size:24px;margin-bottom:4px}
+.page-desc{color:var(--soft);font-size:13.5px;margin-bottom:18px}
+
+.card{
+  background:var(--card);border-radius:var(--r);padding:20px 22px;margin-bottom:16px;
+  box-shadow:0 4px 18px rgba(190,170,140,.10);border:1px solid #FBF4EA;
+}
+.card-title{font-weight:600;font-size:16px;margin-bottom:12px}
+.hint{font-size:12.5px;color:var(--soft);margin-top:8px}
+
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.grow{flex:1;min-width:160px}
+.input,select.input,textarea.input{
+  border:1.5px solid var(--line);background:#FDFBF7;border-radius:14px;padding:10px 14px;
+  font-size:14.5px;color:var(--ink);outline:none;transition:.18s;font-family:inherit;
+}
+.input:focus{border-color:var(--peach);background:#fff}
+textarea.input{width:100%;min-height:90px;resize:vertical}
+.btn{
+  border:none;border-radius:14px;padding:10px 22px;font-size:14.5px;font-weight:600;
+  background:var(--peach);color:#fff;cursor:pointer;transition:.18s;font-family:inherit;
+}
+.btn:hover{filter:brightness(1.05);transform:translateY(-1px)}
+.btn.mint{background:var(--mint)} .btn.lav{background:var(--lav)}
+.btn.sky{background:var(--sky)} .btn.rose{background:var(--rose)} .btn.butter{background:var(--butter)}
+.btn-block{width:100%;padding:13px;border-radius:16px;font-size:15px}
+.mini-btn{
+  border:none;background:#F6F0E8;color:var(--soft);border-radius:10px;padding:4px 10px;
+  font-size:12.5px;cursor:pointer;transition:.15s;font-family:inherit;
+}
+.mini-btn:hover{background:var(--rose-bg);color:var(--ink)}
+
+.pills{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
+.pill{
+  border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:5px 16px;
+  font-size:13.5px;color:var(--soft);cursor:pointer;transition:.16s;font-family:inherit;
+}
+.pill:hover{border-color:var(--peach)}
+.pill.active{background:var(--peach-bg);border-color:var(--peach);color:var(--ink);font-weight:600}
+
+.empty{text-align:center;padding:52px 0 44px;color:var(--soft)}
+.empty-emoji{font-size:44px;margin-bottom:10px}
+
+/* ============ 首页 ============ */
+.home-welcome{text-align:center;padding:60px 20px 40px}
+.hero-deco{position:relative;width:150px;height:150px;margin:0 auto 26px}
+.hero-deco::before{content:"";position:absolute;inset:0;border-radius:46% 54% 60% 40%/50% 44% 56% 50%;background:var(--peach-bg)}
+.hero-deco::after{content:"";position:absolute;inset:22px -12px -8px 26px;border-radius:58% 42% 45% 55%/48% 55% 45% 52%;background:var(--butter-bg);z-index:0}
+.hero-deco .deco-emoji{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:64px;z-index:1}
+.home-date{color:var(--soft);font-size:14.5px;letter-spacing:1px}
+.home-title{font-size:38px;margin:10px 0 12px;font-weight:700}
+.home-quote{color:var(--soft);font-size:15.5px;margin-bottom:34px}
+.start-btn{
+  border:none;background:#fff;border-radius:999px;padding:15px 46px;font-size:16.5px;font-weight:600;
+  color:var(--ink);cursor:pointer;box-shadow:0 8px 24px rgba(220,180,150,.28);
+  transition:.2s;font-family:inherit;border:1px solid #FBF0E6;
+}
+.start-btn:hover{transform:translateY(-3px) scale(1.02);box-shadow:0 12px 30px rgba(220,180,150,.36)}
+.start-tip{margin-top:14px;font-size:12.5px;color:#C4B8A9}
+
+.dash-hero{display:flex;justify-content:space-between;align-items:center;gap:20px;background:linear-gradient(120deg,#FFF7EF,#FFEAE4)}
+.dash-hero h2{font-size:21px;margin:6px 0 8px}
+.dash-date{font-size:13px;color:var(--soft)}
+.dash-sub{font-size:14px;color:var(--soft)}
+.ring-wrap{text-align:center;flex-shrink:0}
+.ring{width:118px;height:118px}
+.ring-bg{fill:none;stroke:#F3E8DB;stroke-width:11}
+.ring-fg{fill:none;stroke:var(--peach);stroke-width:11;stroke-linecap:round;transform:rotate(-90deg);transform-origin:center;transition:stroke-dashoffset .6s ease}
+.ring-txt{font-size:20px;font-weight:700;fill:var(--ink)}
+.ring-label{font-size:12px;color:var(--soft);margin-top:2px}
+.dash-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:16px}
+.dash-cell{border-radius:18px;padding:16px 14px;text-align:center}
+.dash-cell .d-num{font-size:22px;font-weight:700;margin-top:4px}
+.dash-cell .d-label{font-size:12.5px;color:var(--soft)}
+.dash-todo{display:flex;align-items:center;gap:10px;padding:9px 2px;border-bottom:1px dashed var(--line);font-size:14.5px}
+.dash-todo:last-child{border-bottom:none}
+
+/* ============ 待办 ============ */
+.todo-item{
+  display:flex;align-items:center;gap:12px;background:var(--card);border-radius:16px;
+  padding:13px 18px;margin-bottom:10px;border:1px solid #FBF4EA;
+  box-shadow:0 3px 12px rgba(190,170,140,.08);transition:.18s;
+}
+.todo-item:hover{transform:translateX(3px)}
+.todo-check{
+  width:22px;height:22px;border-radius:50%;border:2px solid #E4D8C8;background:#fff;
+  cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;
+  font-size:13px;color:#fff;transition:.18s;
+}
+.todo-item.done .todo-check{background:var(--mint);border-color:var(--mint)}
+.todo-text{flex:1;word-break:break-word}
+.todo-item.done .todo-text{text-decoration:line-through;color:#B9AFA2}
+.tag{font-size:12px;border-radius:999px;padding:2px 10px;flex-shrink:0}
+.tag-work{background:var(--sky-bg)} .tag-life{background:var(--mint-bg)}
+.tag-shop{background:var(--rose-bg)} .tag-fit{background:var(--peach-bg)}
+.tag-study{background:var(--lav-bg)} .tag-other{background:var(--butter-bg)}
+.del{border:none;background:transparent;color:#D8CCBC;cursor:pointer;font-size:15px;padding:4px;border-radius:8px}
+.del:hover{color:#E26D5A;background:var(--rose-bg)}
+
+/* ============ 灵感 ============ */
+.masonry{columns:2;column-gap:14px}
+.inspo-card{
+  break-inside:avoid;background:var(--card);border-radius:18px;padding:16px 18px;margin-bottom:14px;
+  border:1px solid #FBF4EA;box-shadow:0 3px 12px rgba(190,170,140,.08);cursor:pointer;transition:.18s;
+}
+.inspo-card:hover{transform:translateY(-3px);box-shadow:0 8px 20px rgba(190,170,140,.16)}
+.inspo-text{font-size:14.5px;word-break:break-word;white-space:pre-wrap}
+.inspo-meta{display:flex;justify-content:space-between;align-items:center;margin-top:10px;font-size:12px;color:var(--soft)}
+.inspo-card img{width:100%;border-radius:12px;margin-top:10px}
+.prog-seed{background:var(--butter-bg)} .prog-doing{background:var(--mint-bg)} .prog-done{background:var(--lav-bg)}
+
+/* ============ 记账 ============ */
+.m-money-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px}
+.month-nav{display:flex;align-items:center;gap:10px;font-weight:600;font-size:16px}
+.month-nav button{border:none;background:#fff;border-radius:10px;width:30px;height:30px;cursor:pointer;color:var(--soft);font-size:15px;box-shadow:0 2px 8px rgba(190,170,140,.12)}
+.m-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:16px}
+.m-stat{border-radius:18px;padding:16px 18px}
+.m-stat .s-label{font-size:13px;color:var(--soft)}
+.m-stat .s-num{font-size:22px;font-weight:700;margin-top:2px}
+.m-row{display:flex;align-items:center;gap:12px;padding:10px 2px;border-bottom:1px dashed var(--line)}
+.m-row:last-child{border-bottom:none}
+.m-cat-emoji{font-size:19px}
+.m-note{flex:1;font-size:14px}
+.m-date{font-size:12px;color:var(--soft)}
+.amt-out{color:#E2705A;font-weight:600}
+.amt-in{color:#2F9E73;font-weight:600}
+.bar-row{display:flex;align-items:center;gap:10px;margin-bottom:9px;font-size:13.5px}
+.bar-name{width:76px;flex-shrink:0}
+.bar-track{flex:1;background:#F5EEE4;border-radius:999px;height:12px;overflow:hidden}
+.bar-fill{height:100%;border-radius:999px;background:var(--lav);transition:width .4s}
+.bar-amt{width:76px;text-align:right;color:var(--soft);font-size:12.5px;flex-shrink:0}
+.seg{display:flex;background:#F5EFE6;border-radius:14px;padding:4px;gap:4px}
+.seg button{flex:1;border:none;background:transparent;border-radius:11px;padding:8px;cursor:pointer;font-size:14px;color:var(--soft);font-family:inherit;transition:.15s}
+.seg button.active{background:#fff;font-weight:600;color:var(--ink);box-shadow:0 2px 8px rgba(190,170,140,.15)}
+
+/* ============ AI/英语 学习 ============ */
+.entry{
+  background:var(--card);border-radius:16px;padding:15px 18px;margin-bottom:12px;
+  border:1px solid #FBF4EA;box-shadow:0 3px 12px rgba(190,170,140,.08);
+}
+.entry-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.entry-date{font-size:12.5px;color:var(--soft);background:#F7F1E9;border-radius:999px;padding:2px 12px}
+.entry-body{font-size:14.5px;white-space:pre-wrap;word-break:break-word}
+.badge{font-size:12px;border-radius:999px;padding:2px 10px}
+.badge-yes{background:var(--mint-bg)} .badge-no{background:#F3EDE4;color:var(--soft)}
+.en-video-text{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+.en-col{background:#FDF9F2;border-radius:14px;padding:12px 14px;font-size:13.5px;white-space:pre-wrap;word-break:break-word}
+.en-col .col-label{font-size:12px;color:var(--soft);margin-bottom:6px;font-weight:600}
+.dict-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.dict-card{background:var(--card);border-radius:16px;overflow:hidden;border:1px solid #FBF4EA;box-shadow:0 3px 12px rgba(190,170,140,.08)}
+.dict-card img{width:100%;height:150px;object-fit:cover;cursor:pointer;display:block}
+.dict-info{padding:10px 14px;display:flex;justify-content:space-between;align-items:center;font-size:13px}
+.score-badge{background:var(--butter-bg);border-radius:999px;padding:2px 12px;font-weight:600}
+a.plain{color:var(--sky);text-decoration:none} a.plain:hover{text-decoration:underline}
+
+/* ============ 电影 ============ */
+.movie-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.movie-card{background:var(--card);border-radius:18px;overflow:hidden;border:1px solid #FBF4EA;box-shadow:0 3px 12px rgba(190,170,140,.08)}
+.movie-top{padding:16px 18px 12px;display:flex;justify-content:space-between;align-items:flex-start}
+.movie-title{font-size:16.5px;font-weight:700}
+.movie-stars{color:#F0B429;font-size:14px;letter-spacing:2px}
+.movie-body{padding:0 18px 16px;font-size:13.5px;color:#6E6559}
+.movie-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.movie-foot{padding:10px 18px 14px;display:flex;justify-content:space-between;align-items:center;font-size:12.5px;color:var(--soft)}
+.rewatch{background:var(--rose-bg);border-radius:999px;padding:2px 10px;font-size:12px}
+
+/* ============ 旅行 ============ */
+.tv-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:16px}
+.tv-stat{border-radius:18px;padding:18px;text-align:center}
+.tv-stat .t-emoji{font-size:26px}
+.tv-stat .t-num{font-size:24px;font-weight:700;margin-top:2px}
+.tv-stat .t-label{font-size:13px;color:var(--soft)}
+.tv-card{background:var(--card);border-radius:18px;padding:16px 20px;margin-bottom:12px;border:1px solid #FBF4EA;box-shadow:0 3px 12px rgba(190,170,140,.08)}
+.tv-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.tv-dest{font-size:17px;font-weight:700}
+.tv-note{font-size:14px;color:#6E6559;margin-top:8px;white-space:pre-wrap}
+.tv-foot{display:flex;justify-content:space-between;align-items:center;margin-top:10px}
+.st-want{background:var(--sky-bg)} .st-plan{background:var(--butter-bg)} .st-done{background:var(--mint-bg)}
+select.mini{border:1.5px solid var(--line);border-radius:10px;padding:4px 8px;font-size:12.5px;background:#FDFBF7;color:var(--ink);font-family:inherit}
+
+/* ============ 树洞 ============ */
+.tree-hero{background:linear-gradient(120deg,#EAF6EF,#E4F0FC);text-align:center;padding:26px 20px}
+.tree-hero .th-emoji{font-size:40px}
+.worry-card{
+  background:var(--card);border-radius:18px;padding:16px 20px;margin-bottom:12px;
+  border:1px solid #FBF4EA;box-shadow:0 3px 12px rgba(190,170,140,.08);transition:.3s;
+}
+.worry-card.healed{opacity:.62;background:#F9F5EE}
+.worry-text{font-size:14.5px;white-space:pre-wrap;word-break:break-word}
+.worry-card.healed .worry-text{color:var(--soft)}
+
+/* ============ 弹窗 & 提示 ============ */
+.modal-mask{
+  position:fixed;inset:0;background:rgba(90,75,60,.32);backdrop-filter:blur(3px);
+  display:flex;align-items:center;justify-content:center;z-index:99;padding:20px;
+}
+.modal{width:100%;max-width:520px;max-height:86vh;overflow-y:auto;margin:0}
+.modal textarea{min-height:120px}
+.modal-img{width:100%;border-radius:14px;margin-top:10px}
+.modal-actions{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+.toast{
+  position:fixed;left:50%;bottom:36px;transform:translateX(-50%) translateY(20px);
+  background:#4C463F;color:#fff;border-radius:999px;padding:10px 24px;font-size:14px;
+  opacity:0;transition:.3s;z-index:100;pointer-events:none;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ============ 响应式（导航始终保持左侧竖排） ============ */
+@media (max-width:880px){
+  .sidebar{width:170px;padding:18px 10px}
+  .brand{font-size:16px;padding:0 6px 12px}
+  .nav-item{font-size:13.5px;padding:9px 10px;gap:8px}
+  .ghost-btn{font-size:12px;padding:7px 8px}
+  .side-tip{display:none}
+  .main{padding:22px 16px 50px}
+  .masonry{columns:1}
+  .dash-grid,.m-stats,.tv-stats{grid-template-columns:repeat(2,1fr)}
+  .movie-grid,.en-video-text{grid-template-columns:1fr}
+  .dict-grid{grid-template-columns:repeat(2,1fr)}
+  .dash-hero{flex-direction:column;text-align:center}
+}
+@media (max-width:600px){
+  .sidebar{width:68px;padding:16px 8px}
+  .brand{padding:0 0 12px;justify-content:center}
+  .brand .b-emoji{font-size:24px}
+  .b-text,.n-text,.f-text{display:none}
+  .nav-item{justify-content:center;padding:11px 0}
+  .nav-item .n-emoji{font-size:19px}
+  .ghost-btn{width:100%;padding:8px 0;text-align:center}
+  .main{padding:18px 12px 50px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ============ 侧边导航 ============ -->
+  <aside class="sidebar">
+    <div class="brand"><span class="b-emoji">🌷</span><span class="b-text">惊鸿小记</span></div>
+    <nav class="nav">
+      <button class="nav-item active" data-page="home"><span class="n-emoji">🏠</span><span class="n-text">首页</span></button>
+      <button class="nav-item" data-page="todo"><span class="n-emoji">✅</span><span class="n-text">待办清单</span></button>
+      <button class="nav-item" data-page="inspo"><span class="n-emoji">💡</span><span class="n-text">灵感记录</span></button>
+      <button class="nav-item" data-page="money"><span class="n-emoji">💰</span><span class="n-text">记账</span></button>
+      <button class="nav-item" data-page="ai"><span class="n-emoji">🤖</span><span class="n-text">AI学习</span></button>
+      <button class="nav-item" data-page="english"><span class="n-emoji">📖</span><span class="n-text">英语学习</span></button>
+      <button class="nav-item" data-page="movie"><span class="n-emoji">🎬</span><span class="n-text">电影记录</span></button>
+      <button class="nav-item" data-page="travel"><span class="n-emoji">✈️</span><span class="n-text">旅行</span></button>
+      <button class="nav-item" data-page="tree"><span class="n-emoji">🌳</span><span class="n-text">树洞</span></button>
+    </nav>
+    <div class="side-foot">
+      <button class="ghost-btn" id="btnExport"><span class="f-emoji">📦</span><span class="f-text"> 导出备份</span></button>
+      <button class="ghost-btn" id="btnImport"><span class="f-emoji">📥</span><span class="f-text"> 导入数据</span></button>
+      <input type="file" id="importFile" accept="application/json" hidden>
+      <div class="side-tip">数据保存在本机浏览器 ✨</div>
+    </div>
+  </aside>
+
+  <!-- ============ 主内容区 ============ -->
+  <main class="main">
+
+    <!-- 首页 -->
+    <section class="page active" id="page-home">
+      <div class="home-welcome" id="homeWelcome">
+        <div class="hero-deco"><span class="deco-emoji">🌷</span></div>
+        <div class="home-date" id="homeDate"></div>
+        <h1 class="home-title">嗨，惊鸿 ✨</h1>
+        <p class="home-quote" id="homeQuote"></p>
+        <button class="start-btn" id="btnStart">开始今天 🌱</button>
+        <div class="start-tip">点一下，开启今日计划 🌷</div>
+      </div>
+      <div id="homeDash" hidden>
+        <div class="card dash-hero">
+          <div>
+            <div class="dash-date" id="dashDate"></div>
+            <h2>今天也要轻盈地完成目标 ☀️</h2>
+            <div class="dash-sub" id="dashSub"></div>
+          </div>
+          <div class="ring-wrap">
+            <div id="ringWrap"></div>
+            <div class="ring-label">今日进度</div>
+          </div>
+        </div>
+        <div class="dash-grid" id="dashGrid"></div>
+        <div class="card">
+          <div class="card-title">今日待办速览 ✅</div>
+          <div id="dashTodos"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 待办清单 -->
+    <section class="page" id="page-todo">
+      <h2 class="page-title">待办清单 ✅</h2>
+      <p class="page-desc">把要做的事一件件写下来，然后轻盈地完成它们</p>
+      <div class="card">
+        <div class="row">
+          <input class="input grow" id="todoInput" placeholder="添加待办事项...">
+          <select class="input" id="todoCat"></select>
+          <button class="btn" id="todoAdd">添加</button>
+        </div>
+        <div class="pills" id="todoFilters">
+          <button class="pill active" data-f="all">全部</button>
+          <button class="pill" data-f="open">未完成</button>
+          <button class="pill" data-f="done">已完成</button>
+        </div>
+      </div>
+      <div id="todoList"></div>
+      <div class="empty" id="todoEmpty" hidden>
+        <div class="empty-emoji">✏️📓</div>
+        <div>暂无待办事项</div>
+      </div>
+    </section>
+
+    <!-- 灵感记录 -->
+    <section class="page" id="page-inspo">
+      <h2 class="page-title">灵感记录 💡</h2>
+      <p class="page-desc">快速记录日常突发灵感、脑洞、想法，点开卡片可以补图、标记进度</p>
+      <div class="card">
+        <div class="row">
+          <input class="input grow" id="inspoInput" placeholder="灵感来啦 ✨">
+          <button class="btn butter" id="inspoAdd">添加</button>
+        </div>
+        <div class="hint">🌱 萌芽 → 🌿 发酵中 → 🌟 已实现，见证每个想法的成长</div>
+      </div>
+      <div class="masonry" id="inspoList"></div>
+      <div class="empty" id="inspoEmpty" hidden>
+        <div class="empty-emoji">💭</div>
+        <div>还没有灵感，静待它降临</div>
+      </div>
+    </section>
+
+    <!-- 记账 -->
+    <section class="page" id="page-money">
+      <h2 class="page-title">记账 💰</h2>
+      <p class="page-desc">记录每一笔小收支，看清钱的去向</p>
+      <div class="m-money-head">
+        <div class="month-nav">
+          <button id="mPrev">‹</button>
+          <span id="mMonthLabel"></span>
+          <button id="mNext">›</button>
+        </div>
+      </div>
+      <div class="m-stats">
+        <div class="m-stat" style="background:var(--rose-bg)"><div class="s-label">本月支出</div><div class="s-num" id="mOut">¥0</div></div>
+        <div class="m-stat" style="background:var(--mint-bg)"><div class="s-label">本月收入</div><div class="s-num" id="mIn">¥0</div></div>
+        <div class="m-stat" style="background:var(--sky-bg)"><div class="s-label">本月结余</div><div class="s-num" id="mBal">¥0</div></div>
+      </div>
+      <div class="card">
+        <div class="card-title">记一笔 ✍️</div>
+        <div class="row" style="margin-bottom:10px">
+          <div class="seg" id="mType" style="width:200px">
+            <button class="active" data-t="out">支出</button>
+            <button data-t="in">收入</button>
+          </div>
+          <input class="input" id="mAmount" type="number" min="0" step="0.01" placeholder="金额 ¥" style="width:130px">
+          <select class="input" id="mCat"></select>
+          <input class="input" id="mDate" type="date">
+        </div>
+        <div class="row">
+          <input class="input grow" id="mNote" placeholder="备注一下，比如：和朋友的小火锅 🍲">
+          <button class="btn rose" id="mAdd">添加</button>
+        </div>
+      </div>
+      <div class="card" id="mBreakCard" hidden>
+        <div class="card-title">支出构成 📊</div>
+        <div id="mBreakdown"></div>
+      </div>
+      <div id="mList"></div>
+      <div class="empty" id="mEmpty" hidden>
+        <div class="empty-emoji">🧾</div>
+        <div>这个月还没有记录</div>
+      </div>
+    </section>
+
+    <!-- AI学习 -->
+    <section class="page" id="page-ai">
+      <h2 class="page-title">AI学习 🤖</h2>
+      <p class="page-desc">沉淀每天的学习心得，追踪每一条视频的成长</p>
+      <div class="card">
+        <div class="card-title">今日学习心得 📝</div>
+        <textarea class="input" id="aiNoteInput" placeholder="今天学到了什么？有什么新的理解和感悟..."></textarea>
+        <div class="row" style="margin-top:10px;justify-content:flex-end">
+          <button class="btn lav" id="aiNoteAdd">保存心得</button>
+        </div>
+      </div>
+      <div id="aiNotes"></div>
+      <div class="card">
+        <div class="card-title">AI学习视频记录 🎥</div>
+        <div class="row" style="margin-bottom:10px">
+          <div class="seg" id="aiPub" style="width:220px">
+            <button class="active" data-p="yes">已发布 🎉</button>
+            <button data-p="no">未发布 🌙</button>
+          </div>
+          <input class="input grow" id="aiTitle" placeholder="视频主题 / 标题（选填）">
+        </div>
+        <textarea class="input" id="aiFeedback" placeholder="视频反馈：播放量、点赞、评论、自己的复盘..."></textarea>
+        <div class="row" style="margin-top:10px;justify-content:flex-end">
+          <button class="btn lav" id="aiVideoAdd">保存记录</button>
+        </div>
+      </div>
+      <div id="aiVideos"></div>
+    </section>
+
+    <!-- 英语学习 -->
+    <section class="page" id="page-english">
+      <h2 class="page-title">英语学习 📖</h2>
+      <p class="page-desc">收藏演讲视频与中英文案，记录每一次听写</p>
+      <div class="card">
+        <div class="card-title">演讲视频库 🎙️</div>
+        <div class="row" style="margin-bottom:10px">
+          <input class="input grow" id="enTitle" placeholder="视频标题，如：乔布斯斯坦福演讲">
+          <input class="input grow" id="enLink" placeholder="视频链接（选填）">
+        </div>
+        <textarea class="input" id="enText" placeholder="英文原文..."></textarea>
+        <textarea class="input" id="zhText" placeholder="中文翻译..." style="margin-top:10px"></textarea>
+        <div class="row" style="margin-top:10px;justify-content:flex-end">
+          <button class="btn sky" id="enAdd">收入视频库</button>
+        </div>
+      </div>
+      <div id="enList"></div>
+      <div class="card">
+        <div class="card-title">今日听写 ✍️ <span class="badge" style="background:var(--butter-bg)" id="dAvg" hidden></span></div>
+        <div class="row">
+          <input type="file" id="dImg" accept="image/*" hidden>
+          <button class="ghost-btn" id="dImgBtn">📷 上传听写图片</button>
+          <span id="dImgName" style="font-size:12.5px;color:var(--soft)"></span>
+          <input class="input" id="dScore" type="number" min="0" max="100" placeholder="打分" style="width:100px">
+          <button class="btn sky" id="dAdd">保存</button>
+        </div>
+      </div>
+      <div class="dict-grid" id="dList"></div>
+      <div class="empty" id="dEmpty" hidden>
+        <div class="empty-emoji">🎧</div>
+        <div>还没有听写记录，今天开始第一篇吧</div>
+      </div>
+    </section>
+
+    <!-- 电影记录 -->
+    <section class="page" id="page-movie">
+      <h2 class="page-title">电影记录 🎬</h2>
+      <p class="page-desc">记录看过的电影剧集，写下只属于自己的观后感</p>
+      <div class="card">
+        <div class="row" style="margin-bottom:10px">
+          <input class="input grow" id="mvTitle" placeholder="片名，如：千与千寻">
+          <select class="input" id="mvType">
+            <option value="电影">🎬 电影</option>
+            <option value="剧集">📺 剧集</option>
+            <option value="纪录片">🎥 纪录片</option>
+            <option value="综艺">🎤 综艺</option>
+          </select>
+          <select class="input" id="mvRating">
+            <option value="5">⭐⭐⭐⭐⭐</option>
+            <option value="4">⭐⭐⭐⭐</option>
+            <option value="3">⭐⭐⭐</option>
+            <option value="2">⭐⭐</option>
+            <option value="1">⭐</option>
+          </select>
+        </div>
+        <div class="row" style="margin-bottom:10px">
+          <input class="input grow" id="mvTags" placeholder="标签，用逗号分隔，如：治愈, 动画, 宫崎骏">
+          <label style="font-size:14px;color:var(--soft);display:flex;align-items:center;gap:6px;cursor:pointer">
+            <input type="checkbox" id="mvRewatch" style="width:16px;height:16px;accent-color:#EE9BBE"> 值得二刷 🔁
+          </label>
+        </div>
+        <textarea class="input" id="mvReview" placeholder="私人观后感：哪个瞬间打动了你..."></textarea>
+        <div class="row" style="margin-top:10px;justify-content:flex-end">
+          <button class="btn rose" id="mvAdd">记录下来</button>
+        </div>
+      </div>
+      <div class="pills" id="mvFilters" style="margin:0 0 14px 2px">
+        <button class="pill active" data-f="all">全部</button>
+        <button class="pill" data-f="电影">🎬 电影</button>
+        <button class="pill" data-f="剧集">📺 剧集</button>
+        <button class="pill" data-f="rewatch">🔁 值得二刷</button>
+      </div>
+      <div class="movie-grid" id="mvList"></div>
+      <div class="empty" id="mvEmpty" hidden>
+        <div class="empty-emoji">🍿</div>
+        <div>还没有影视记录，今晚看一部吧</div>
+      </div>
+    </section>
+
+    <!-- 旅行 -->
+    <section class="page" id="page-travel">
+      <h2 class="page-title">旅行 ✈️</h2>
+      <p class="page-desc">收藏想去的地方，规划中的路线，和走过的风景</p>
+      <div class="tv-stats">
+        <div class="tv-stat" style="background:var(--sky-bg)"><div class="t-emoji">🧭</div><div class="t-num" id="tvWant">0</div><div class="t-label">想去</div></div>
+        <div class="tv-stat" style="background:var(--butter-bg)"><div class="t-emoji">🗺️</div><div class="t-num" id="tvPlan">0</div><div class="t-label">规划中</div></div>
+        <div class="tv-stat" style="background:var(--mint-bg)"><div class="t-emoji">🎒</div><div class="t-num" id="tvDone">0</div><div class="t-label">已去过</div></div>
+      </div>
+      <div class="pills" id="tvFilters" style="margin:0 0 14px 2px">
+        <button class="pill active" data-f="all">全部</button>
+        <button class="pill" data-f="want">🧭 想去</button>
+        <button class="pill" data-f="plan">🗺️ 规划中</button>
+        <button class="pill" data-f="done">🎒 已去</button>
+      </div>
+      <div class="card">
+        <div class="card-title">添加旅行目的地 📍</div>
+        <div class="row" style="margin-bottom:10px">
+          <input class="input grow" id="tvDest" placeholder="目的地名称，如：日本京都">
+          <input class="input" id="tvDate" placeholder="计划日期，如：2027年春" style="width:170px">
+        </div>
+        <textarea class="input" id="tvNote" placeholder="想说点什么（行程 / 期待 / 感受）..."></textarea>
+        <div class="pills" id="tvStatus" style="margin:12px 0 14px">
+          <button class="pill active" data-s="want">🧭 想去</button>
+          <button class="pill" data-s="plan">🗺️ 规划中</button>
+          <button class="pill" data-s="done">🎒 已完成</button>
+        </div>
+        <button class="btn sky btn-block" id="tvAdd">添加到旅行清单</button>
+      </div>
+      <div id="tvList"></div>
+      <div class="empty" id="tvEmpty" hidden>
+        <div class="empty-emoji">🗺️</div>
+        <div>世界那么大，先收藏一个目的地吧</div>
+      </div>
+    </section>
+
+    <!-- 树洞 -->
+    <section class="page" id="page-tree">
+      <h2 class="page-title">树洞 🌳</h2>
+      <p class="page-desc">把烦恼写下来，交给树洞保管</p>
+      <div class="card tree-hero">
+        <div class="th-emoji">🌳🕳️</div>
+        <div style="font-size:14px;color:var(--soft);margin-top:6px">这里只有你自己，说什么都可以</div>
+      </div>
+      <div class="card">
+        <textarea class="input" id="thInput" placeholder="最近的烦恼是..."></textarea>
+        <div class="row" style="margin-top:10px">
+          <select class="input" id="thMood">
+            <option>😔 低落</option><option>😤 生气</option><option>😢 难过</option>
+            <option>😰 焦虑</option><option>😶 平静</option>
+          </select>
+          <div style="flex:1"></div>
+          <button class="btn mint" id="thAdd">丢进树洞 🕳️</button>
+        </div>
+      </div>
+      <div id="thList"></div>
+      <div class="empty" id="thEmpty" hidden>
+        <div class="empty-emoji">🍃</div>
+        <div>树洞空空的，说明最近心情不错呀</div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- 通用弹窗 -->
+<div class="modal-mask" id="modalMask" hidden>
+  <div class="modal card" id="modalBox"></div>
+</div>
+
+<script>
+/* ==================== 基础工具 ==================== */
+const $  = s => document.querySelector(s);
+const $$ = s => document.querySelectorAll(s);
+const store = {
+  get(k, d){ try{ const v = localStorage.getItem('jh_'+k); return v ? JSON.parse(v) : d; }catch(e){ return d; } },
+  set(k, v){ try{ localStorage.setItem('jh_'+k, JSON.stringify(v)); }catch(e){ toast('存储空间不足，建议导出备份后清理图片 ⚠️'); } }
+};
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2,7);
+const pad = n => String(n).padStart(2,'0');
+const fmtDate = d => d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const todayStr = () => fmtDate(new Date());
+const WEEK = ['日','一','二','三','四','五','六'];
+const esc = s => String(s==null?'':s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const moneyFmt = n => '¥' + (Math.round(n*100)/100).toLocaleString('zh-CN');
+
+function toast(msg){
+  const t = document.createElement('div');
+  t.className = 'toast'; t.textContent = msg;
+  document.body.appendChild(t);
+  requestAnimationFrame(()=>t.classList.add('show'));
+  setTimeout(()=>{ t.classList.remove('show'); setTimeout(()=>t.remove(), 320); }, 1800);
+}
+function compressImage(file, maxSize){
+  maxSize = maxSize || 1000;
+  return new Promise((resolve, reject)=>{
+    const reader = new FileReader();
+    reader.onload = e => {
+      const img = new Image();
+      img.onload = () => {
+        let w = img.width, h = img.height;
+        const scale = Math.min(1, maxSize / Math.max(w, h));
+        w = Math.round(w*scale); h = Math.round(h*scale);
+        const c = document.createElement('canvas');
+        c.width = w; c.height = h;
+        c.getContext('2d').drawImage(img, 0, 0, w, h);
+        resolve(c.toDataURL('image/jpeg', 0.72));
+      };
+      img.onerror = reject;
+      img.src = e.target.result;
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+function openModal(html){ $('#modalBox').innerHTML = html; $('#modalMask').hidden = false; }
+function closeModal(){ $('#modalMask').hidden = true; $('#modalBox').innerHTML = ''; }
+$('#modalMask').addEventListener('click', e => { if(e.target.id === 'modalMask') closeModal(); });
+
+/* ==================== 导航切换 ==================== */
+const RENDER = {};
+$$('.nav-item').forEach(btn => btn.addEventListener('click', () => {
+  $$('.nav-item').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  $$('.page').forEach(p => p.classList.remove('active'));
+  $('#page-' + btn.dataset.page).classList.add('active');
+  const fn = RENDER[btn.dataset.page];
+  if(fn) fn();
+}));
+
+/* ==================== 首页 ==================== */
+const QUOTES = [
+  '把日子过成自己喜欢的样子。','慢慢来，谁的花期都不一样。',
+  '今天也是充满可能的一天。','你只管努力，时间会给你答案。',
+  '轻盈一点，世界就没那么重。','认真生活的人，运气都不会太差。',
+  '保持热爱，奔赴山海。','每一天，都值得被温柔以待。',
+  '小小的进步，也是进步。','做自己人生的主角。',
+  '别怕路长，只怕心老。','心怀宇宙浪漫，也珍惜人间日常。'
+];
+function getStreak(){
+  const days = store.get('checkins', []);
+  let streak = 0;
+  const d = new Date();
+  if(!days.includes(fmtDate(d))) d.setDate(d.getDate() - 1);
+  while(days.includes(fmtDate(d))){ streak++; d.setDate(d.getDate() - 1); }
+  return streak;
+}
+function ringSVG(pct){
+  const r = 50, c = 2 * Math.PI * r;
+  return '<svg class="ring" viewBox="0 0 120 120">' +
+    '<circle class="ring-bg" cx="60" cy="60" r="' + r + '"></circle>' +
+    '<circle class="ring-fg" cx="60" cy="60" r="' + r + '" stroke-dasharray="' + c + '" stroke-dashoffset="' + (c * (1 - pct/100)) + '"></circle>' +
+    '<text class="ring-txt" x="60" y="67" text-anchor="middle">' + pct + '%</text></svg>';
+}
+function dateText(){
+  const d = new Date();
+  return d.getFullYear() + '年' + (d.getMonth()+1) + '月' + d.getDate() + '日 · 星期' + WEEK[d.getDay()];
+}
+function renderHome(){
+  const started = store.get('home_started', '') === todayStr();
+  $('#homeWelcome').hidden = started;
+  $('#homeDash').hidden = !started;
+  if(!started){
+    $('#homeDate').textContent = dateText();
+    const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(),0,0)) / 86400000);
+    $('#homeQuote').textContent = QUOTES[dayOfYear % QUOTES.length];
+    return;
+  }
+  // 仪表盘
+  const todos = store.get('todos', []);
+  const total = todos.length, done = todos.filter(t => t.done).length;
+  const pct = total ? Math.round(done / total * 100) : 0;
+  $('#dashDate').textContent = dateText();
+  $('#dashSub').textContent = done + '/' + total + ' 已完成 · 连续打卡 ' + getStreak() + ' 天 🔥';
+  $('#ringWrap').innerHTML = ringSVG(pct);
+  const todayOut = store.get('money', []).filter(m => m.type === 'out' && m.date === todayStr())
+    .reduce((s, m) => s + Number(m.amount || 0), 0);
+  const cells = [
+    { bg:'var(--rose-bg)',   emoji:'💰', label:'今日支出', num: moneyFmt(todayOut) },
+    { bg:'var(--butter-bg)', emoji:'💡', label:'灵感累计', num: store.get('inspos', []).length + ' 条' },
+    { bg:'var(--lav-bg)',    emoji:'🎬', label:'影视记录', num: store.get('movies', []).length + ' 部' },
+    { bg:'var(--sky-bg)',    emoji:'🧭', label:'旅行心愿', num: store.get('travels', []).filter(t => t.status === 'want').length + ' 个' }
+  ];
+  $('#dashGrid').innerHTML = cells.map(c =>
+    '<div class="dash-cell" style="background:' + c.bg + '"><div style="font-size:22px">' + c.emoji + '</div>' +
+    '<div class="d-num">' + c.num + '</div><div class="d-label">' + c.label + '</div></div>').join('');
+  const open = todos.filter(t => !t.done).slice(0, 5);
+  $('#dashTodos').innerHTML = open.length
+    ? open.map(t => '<div class="dash-todo"><span>◻️</span><span>' + esc(t.text) + '</span></div>').join('') +
+      (todos.filter(t => !t.done).length > 5 ? '<div class="dash-todo" style="color:var(--soft)">还有 ' + (todos.filter(t=>!t.done).length - 5) + ' 件，加油呀 🌱</div>' : '')
+    : '<div class="dash-todo" style="color:var(--soft)">今天没有待办，享受轻盈的一天 🍃</div>';
+}
+$('#btnStart').addEventListener('click', () => {
+  const t = todayStr();
+  store.set('home_started', t);
+  const days = store.get('checkins', []);
+  if(!days.includes(t)){ days.push(t); store.set('checkins', days); }
+  renderHome();
+  toast('新的一天开始啦 🌱');
+});
+RENDER.home = renderHome;
+
+/* ==================== 待办清单 ==================== */
+const TODO_CATS = [
+  { id:'work',  label:'💼 工作' }, { id:'life', label:'🌿 个人' },
+  { id:'shop',  label:'🛍️ 购物' }, { id:'fit',  label:'💪 健身' },
+  { id:'study', label:'📚 学习' }, { id:'other', label:'🎈 其他' }
+];
+let todoFilter = 'all';
+$('#todoCat').innerHTML = TODO_CATS.map(c => '<option value="' + c.id + '">' + c.label + '</option>').join('');
+function catOf(id){ const c = TODO_CATS.find(c => c.id === id); return c || TODO_CATS[5]; }
+function addTodo(){
+  const text = $('#todoInput').value.trim();
+  if(!text){ toast('先写点内容吧 ✏️'); return; }
+  const todos = store.get('todos', []);
+  todos.unshift({ id: uid(), text, cat: $('#todoCat').value, done: false, created: todayStr(), doneAt: '' });
+  store.set('todos', todos);
+  $('#todoInput').value = '';
+  renderTodo(); toast('已添加 ✅');
+}
+$('#todoAdd').addEventListener('click', addTodo);
+$('#todoInput').addEventListener('keydown', e => { if(e.key === 'Enter') addTodo(); });
+$('#todoFilters').addEventListener('click', e => {
+  const b = e.target.closest('.pill'); if(!b) return;
+  todoFilter = b.dataset.f;
+  $$('#todoFilters .pill').forEach(p => p.classList.toggle('active', p === b));
+  renderTodo();
+});
+function renderTodo(){
+  const todos = store.get('todos', []);
+  const list = todos.filter(t => todoFilter === 'all' || (todoFilter === 'done') === t.done);
+  $('#todoEmpty').hidden = list.length > 0;
+  $('#todoList').innerHTML = list.map(t => {
+    const c = catOf(t.cat);
+    return '<div class="todo-item' + (t.done ? ' done' : '') + '">' +
+      '<div class="todo-check" data-id="' + t.id + '">' + (t.done ? '✓' : '') + '</div>' +
+      '<div class="todo-text">' + esc(t.text) + '</div>' +
+      '<span class="tag tag-' + c.id + '">' + c.label + '</span>' +
+      '<button class="del" data-id="' + t.id + '">✕</button></div>';
+  }).join('');
+}
+$('#todoList').addEventListener('click', e => {
+  const chk = e.target.closest('.todo-check');
+  const del = e.target.closest('.del');
+  const todos = store.get('todos', []);
+  if(chk){
+    const t = todos.find(t => t.id === chk.dataset.id);
+    if(t){ t.done = !t.done; t.doneAt = t.done ? todayStr() : ''; store.set('todos', todos); renderTodo(); }
+  } else if(del){
+    store.set('todos', todos.filter(t => t.id !== del.dataset.id));
+    renderTodo(); toast('已删除 🗑️');
+  }
+});
+RENDER.todo = renderTodo;
+
+/* ==================== 灵感记录 ==================== */
+const PROG = { seed:'🌱 萌芽', doing:'🌿 发酵中', done:'🌟 已实现' };
+function addInspo(){
+  const text = $('#inspoInput').value.trim();
+  if(!text){ toast('先写点灵感吧 💡'); return; }
+  const list = store.get('inspos', []);
+  list.unshift({ id: uid(), text, img: '', prog: 'seed', created: todayStr() });
+  store.set('inspos', list);
+  $('#inspoInput').value = '';
+  renderInspo(); toast('灵感已收藏 ✨');
+}
+$('#inspoAdd').addEventListener('click', addInspo);
+$('#inspoInput').addEventListener('keydown', e => { if(e.key === 'Enter') addInspo(); });
+function renderInspo(){
+  const list = store.get('inspos', []);
+  $('#inspoEmpty').hidden = list.length > 0;
+  $('#inspoList').innerHTML = list.map(it =>
+    '<div class="inspo-card" data-id="' + it.id + '">' +
+      '<div class="inspo-text">' + esc(it.text.length > 120 ? it.text.slice(0,120) + '…' : it.text) + '</div>' +
+      (it.img ? '<img src="' + it.img + '" alt="">' : '') +
+      '<div class="inspo-meta"><span>' + it.created + '</span>' +
+      '<span class="tag prog-' + it.prog + '">' + (PROG[it.prog] || PROG.seed) + '</span></div>' +
+    '</div>').join('');
+}
+$('#inspoList').addEventListener('click', e => {
+  const card = e.target.closest('.inspo-card'); if(!card) return;
+  const list = store.get('inspos', []);
+  const it = list.find(x => x.id === card.dataset.id); if(!it) return;
+  openModal(
+    '<div class="card-title">灵感详情 💡</div>' +
+    '<textarea class="input" id="mdText">' + esc(it.text) + '</textarea>' +
+    (it.img ? '<img class="modal-img" src="' + it.img + '" alt="">' : '') +
+    '<div class="row" style="margin-top:12px">' +
+      '<input type="file" id="mdImg" accept="image/*" hidden>' +
+      '<button class="ghost-btn" id="mdImgBtn">📷 ' + (it.img ? '更换图片' : '添加图片') + '</button>' +
+      '<select class="input" id="mdProg">' +
+        Object.keys(PROG).map(k => '<option value="' + k + '"' + (it.prog === k ? ' selected' : '') + '>' + PROG[k] + '</option>').join('') +
+      '</select>' +
+    '</div>' +
+    '<div class="modal-actions">' +
+      '<button class="btn butter" id="mdSave">保存</button>' +
+      '<button class="mini-btn" id="mdDel">删除 🗑️</button>' +
+      '<div style="flex:1"></div>' +
+      '<button class="mini-btn" id="mdClose">关闭</button>' +
+    '</div>');
+  let newImg = it.img;
+  $('#mdImgBtn').addEventListener('click', () => $('#mdImg').click());
+  $('#mdImg').addEventListener('change', async e => {
+    if(e.target.files[0]){ newImg = await compressImage(e.target.files[0]); toast('图片已就绪 📷'); }
+  });
+  $('#mdSave').addEventListener('click', () => {
+    it.text = $('#mdText').value.trim() || it.text;
+    it.prog = $('#mdProg').value;
+    it.img = newImg;
+    store.set('inspos', list);
+    closeModal(); renderInspo(); toast('已保存 ✨');
+  });
+  $('#mdDel').addEventListener('click', () => {
+    store.set('inspos', list.filter(x => x.id !== it.id));
+    closeModal(); renderInspo(); toast('已删除 🗑️');
+  });
+  $('#mdClose').addEventListener('click', closeModal);
+});
+RENDER.inspo = renderInspo;
+
+/* ==================== 记账 ==================== */
+const OUT_CATS = [['food','🍜 餐饮'],['traffic','🚌 交通'],['shop','🛍️ 购物'],['fun','🎮 娱乐'],['home','🏠 居家'],['study','📚 学习'],['med','💊 医疗'],['gift','🎁 人情'],['other','🎈 其他']];
+const IN_CATS  = [['salary','💼 工资'],['part','🧧 兼职'],['invest','📈 理财'],['other','🎈 其他']];
+let mType = 'out';
+let mMonth = todayStr().slice(0, 7);
+function fillMoneyCats(){
+  const cats = mType === 'out' ? OUT_CATS : IN_CATS;
+  $('#mCat').innerHTML = cats.map(c => '<option value="' + c[0] + '">' + c[1] + '</option>').join('');
+}
+fillMoneyCats();
+$('#mDate').value = todayStr();
+$('#mType').addEventListener('click', e => {
+  const b = e.target.closest('button'); if(!b) return;
+  mType = b.dataset.t;
+  $$('#mType button').forEach(x => x.classList.toggle('active', x === b));
+  fillMoneyCats();
+});
+$('#mPrev').addEventListener('click', () => { shiftMonth(-1); });
+$('#mNext').addEventListener('click', () => { shiftMonth(1); });
+function shiftMonth(n){
+  const d = new Date(Number(mMonth.slice(0,4)), Number(mMonth.slice(5,7)) - 1 + n, 1);
+  mMonth = d.getFullYear() + '-' + pad(d.getMonth() + 1);
+  renderMoney();
+}
+function catLabel(type, id){
+  const cats = type === 'out' ? OUT_CATS : IN_CATS;
+  const c = cats.find(c => c[0] === id);
+  return c ? c[1] : '🎈 其他';
+}
+$('#mAdd').addEventListener('click', () => {
+  const amt = parseFloat($('#mAmount').value);
+  if(!amt || amt <= 0){ toast('请输入金额 💰'); return; }
+  const list = store.get('money', []);
+  list.unshift({ id: uid(), type: mType, amount: amt, cat: $('#mCat').value,
+    note: $('#mNote').value.trim(), date: $('#mDate').value || todayStr() });
+  store.set('money', list);
+  $('#mAmount').value = ''; $('#mNote').value = '';
+  renderMoney(); toast('已记账 🧾');
+});
+function renderMoney(){
+  const all = store.get('money', []);
+  const list = all.filter(m => (m.date || '').slice(0,7) === mMonth)
+    .sort((a,b) => (a.date < b.date ? 1 : -1));
+  $('#mMonthLabel').textContent = mMonth.slice(0,4) + '年' + Number(mMonth.slice(5,7)) + '月';
+  const out = list.filter(m => m.type === 'out').reduce((s,m) => s + Number(m.amount), 0);
+  const inn = list.filter(m => m.type === 'in').reduce((s,m) => s + Number(m.amount), 0);
+  $('#mOut').textContent = moneyFmt(out);
+  $('#mIn').textContent = moneyFmt(inn);
+  $('#mBal').textContent = moneyFmt(inn - out);
+  // 支出构成
+  const byCat = {};
+  list.filter(m => m.type === 'out').forEach(m => { byCat[m.cat] = (byCat[m.cat] || 0) + Number(m.amount); });
+  const entries = Object.entries(byCat).sort((a,b) => b[1] - a[1]).slice(0, 6);
+  $('#mBreakCard').hidden = entries.length === 0;
+  const colors = ['var(--lav)','var(--peach)','var(--mint)','var(--sky)','var(--rose)','var(--butter)'];
+  $('#mBreakdown').innerHTML = entries.map((e, i) =>
+    '<div class="bar-row"><span class="bar-name">' + catLabel('out', e[0]) + '</span>' +
+    '<div class="bar-track"><div class="bar-fill" style="width:' + (out ? Math.round(e[1]/out*100) : 0) + '%;background:' + colors[i % 6] + '"></div></div>' +
+    '<span class="bar-amt">' + moneyFmt(e[1]) + '</span></div>').join('');
+  // 明细
+  $('#mEmpty').hidden = list.length > 0;
+  $('#mList').innerHTML = list.length ? '<div class="card"><div class="card-title">收支明细 📒</div>' +
+    list.map(m =>
+      '<div class="m-row"><span class="m-cat-emoji">' + catLabel(m.type, m.cat).split(' ')[0] + '</span>' +
+      '<div class="m-note">' + esc(m.note || catLabel(m.type, m.cat).split(' ').slice(1).join(' ')) +
+        '<div class="m-date">' + m.date + ' · ' + catLabel(m.type, m.cat) + '</div></div>' +
+      '<span class="' + (m.type === 'out' ? 'amt-out">-' : 'amt-in">+') + moneyFmt(m.amount) + '</span>' +
+      '<button class="del" data-id="' + m.id + '">✕</button></div>').join('') + '</div>' : '';
+}
+$('#mList').addEventListener('click', e => {
+  const del = e.target.closest('.del'); if(!del) return;
+  store.set('money', store.get('money', []).filter(m => m.id !== del.dataset.id));
+  renderMoney(); toast('已删除 🗑️');
+});
+RENDER.money = renderMoney;
+
+/* ==================== AI学习 ==================== */
+let aiPubVal = 'yes';
+$('#aiPub').addEventListener('click', e => {
+  const b = e.target.closest('button'); if(!b) return;
+  aiPubVal = b.dataset.p;
+  $$('#aiPub button').forEach(x => x.classList.toggle('active', x === b));
+});
+$('#aiNoteAdd').addEventListener('click', () => {
+  const text = $('#aiNoteInput').value.trim();
+  if(!text){ toast('先写点心得吧 📝'); return; }
+  const list = store.get('ai_notes', []);
+  list.unshift({ id: uid(), date: todayStr(), text });
+  store.set('ai_notes', list);
+  $('#aiNoteInput').value = '';
+  renderAI(); toast('心得已保存 🤖');
+});
+$('#aiVideoAdd').addEventListener('click', () => {
+  const title = $('#aiTitle').value.trim();
+  const fb = $('#aiFeedback').value.trim();
+  if(!title && !fb && aiPubVal === 'yes'){ toast('写点视频主题或反馈吧 🎥'); return; }
+  const list = store.get('ai_videos', []);
+  list.unshift({ id: uid(), date: todayStr(), published: aiPubVal === 'yes', title, feedback: fb });
+  store.set('ai_videos', list);
+  $('#aiTitle').value = ''; $('#aiFeedback').value = '';
+  renderAI(); toast('已记录 🎬');
+});
+function renderAI(){
+  const notes = store.get('ai_notes', []);
+  $('#aiNotes').innerHTML = notes.length ? '<div class="card-title" style="margin:6px 2px 12px">历史心得 📚</div>' +
+    notes.map(n =>
+      '<div class="entry"><div class="entry-head"><span class="entry-date">' + n.date + '</span>' +
+      '<button class="del" data-kind="ai_notes" data-id="' + n.id + '">✕</button></div>' +
+      '<div class="entry-body">' + esc(n.text) + '</div></div>').join('') : '';
+  const vids = store.get('ai_videos', []);
+  $('#aiVideos').innerHTML = vids.length ? '<div class="card-title" style="margin:18px 2px 12px">视频发布历史 🎥</div>' +
+    vids.map(v =>
+      '<div class="entry"><div class="entry-head"><span class="entry-date">' + v.date + '</span>' +
+      '<span><span class="badge ' + (v.published ? 'badge-yes' : 'badge-no') + '">' + (v.published ? '已发布 🎉' : '未发布 🌙') + '</span> ' +
+      '<button class="del" data-kind="ai_videos" data-id="' + v.id + '">✕</button></span></div>' +
+      (v.title ? '<div style="font-weight:600;margin-bottom:4px">' + esc(v.title) + '</div>' : '') +
+      (v.feedback ? '<div class="entry-body">' + esc(v.feedback) + '</div>' : '') + '</div>').join('') : '';
+}
+$('#page-ai').addEventListener('click', e => {
+  const del = e.target.closest('.del'); if(!del) return;
+  store.set(del.dataset.kind, store.get(del.dataset.kind, []).filter(x => x.id !== del.dataset.id));
+  renderAI(); toast('已删除 🗑️');
+});
+RENDER.ai = renderAI;
+
+/* ==================== 英语学习 ==================== */
+let dImgData = '';
+$('#enAdd').addEventListener('click', () => {
+  const title = $('#enTitle').value.trim();
+  if(!title){ toast('至少写个标题吧 🎙️'); return; }
+  const list = store.get('en_videos', []);
+  list.unshift({ id: uid(), title, link: $('#enLink').value.trim(),
+    en: $('#enText').value.trim(), zh: $('#zhText').value.trim(), created: todayStr() });
+  store.set('en_videos', list);
+  $('#enTitle').value = ''; $('#enLink').value = ''; $('#enText').value = ''; $('#zhText').value = '';
+  renderEN(); toast('已收入视频库 📖');
+});
+$('#dImgBtn').addEventListener('click', () => $('#dImg').click());
+$('#dImg').addEventListener('change', async e => {
+  if(!e.target.files[0]) return;
+  dImgData = await compressImage(e.target.files[0], 1200);
+  $('#dImgName').textContent = '图片已就绪 ✅';
+});
+$('#dAdd').addEventListener('click', () => {
+  const score = $('#dScore').value;
+  if(!dImgData){ toast('先上传听写图片 📷'); return; }
+  if(score === '' || score < 0 || score > 100){ toast('打个分吧（0-100） ✍️'); return; }
+  const list = store.get('en_dict', []);
+  list.unshift({ id: uid(), date: todayStr(), score: Number(score), img: dImgData });
+  store.set('en_dict', list);
+  dImgData = ''; $('#dImgName').textContent = ''; $('#dScore').value = ''; $('#dImg').value = '';
+  renderEN(); toast('听写已保存 🎧');
+});
+function renderEN(){
+  const vids = store.get('en_videos', []);
+  $('#enList').innerHTML = vids.map((v, i) =>
+    '<div class="entry"><div class="entry-head"><strong>' + esc(v.title) + '</strong>' +
+    '<span>' + (v.link ? '<a class="plain" href="' + esc(v.link) + '" target="_blank">打开视频 🔗</a> ' : '') +
+    '<button class="del" data-kind="en_videos" data-id="' + v.id + '">✕</button></span></div>' +
+    ((v.en || v.zh) ?
+      '<button class="mini-btn" data-toggle="en' + i + '">查看中英文案 📄</button>' +
+      '<div class="en-video-text" id="en' + i + '" hidden>' +
+        '<div class="en-col"><div class="col-label">🇬🇧 英文原文</div>' + esc(v.en || '（未填写）') + '</div>' +
+        '<div class="en-col"><div class="col-label">🇨🇳 中文翻译</div>' + esc(v.zh || '（未填写）') + '</div>' +
+      '</div>' : '') + '</div>').join('');
+  const dict = store.get('en_dict', []);
+  $('#dEmpty').hidden = dict.length > 0;
+  if(dict.length){
+    const avg = Math.round(dict.reduce((s,d) => s + Number(d.score), 0) / dict.length);
+    $('#dAvg').hidden = false;
+    $('#dAvg').textContent = '平均分 ' + avg;
+  } else { $('#dAvg').hidden = true; }
+  $('#dList').innerHTML = dict.map(d =>
+    '<div class="dict-card"><img src="' + d.img + '" data-id="' + d.id + '" alt="听写">' +
+    '<div class="dict-info"><span>' + d.date + '</span>' +
+    '<span><span class="score-badge">' + d.score + ' 分</span> ' +
+    '<button class="del" data-kind="en_dict" data-id="' + d.id + '">✕</button></span></div></div>').join('');
+}
+$('#page-english').addEventListener('click', e => {
+  const tgl = e.target.closest('[data-toggle]');
+  if(tgl){ const el = document.getElementById(tgl.dataset.toggle); el.hidden = !el.hidden;
+    tgl.textContent = el.hidden ? '查看中英文案 📄' : '收起文案 📄'; return; }
+  const img = e.target.closest('.dict-card img');
+  if(img){ openModal('<img class="modal-img" src="' + img.src + '" alt="听写">' +
+    '<div class="modal-actions"><button class="mini-btn" onclick="document.getElementById(\'modalMask\').hidden=true">关闭</button></div>'); return; }
+  const del = e.target.closest('.del');
+  if(del){ store.set(del.dataset.kind, store.get(del.dataset.kind, []).filter(x => x.id !== del.dataset.id));
+    renderEN(); toast('已删除 🗑️'); }
+});
+RENDER.english = renderEN;
+
+/* ==================== 电影记录 ==================== */
+let mvFilter = 'all';
+const MV_COLORS = ['var(--peach-bg)','var(--lav-bg)','var(--mint-bg)','var(--sky-bg)','var(--rose-bg)','var(--butter-bg)'];
+$('#mvFilters').addEventListener('click', e => {
+  const b = e.target.closest('.pill'); if(!b) return;
+  mvFilter = b.dataset.f;
+  $$('#mvFilters .pill').forEach(p => p.classList.toggle('active', p === b));
+  renderMovie();
+});
+$('#mvAdd').addEventListener('click', () => {
+  const title = $('#mvTitle').value.trim();
+  if(!title){ toast('写个片名吧 🎬'); return; }
+  const list = store.get('movies', []);
+  list.unshift({ id: uid(), title, mtype: $('#mvType').value, rating: Number($('#mvRating').value),
+    tags: $('#mvTags').value.split(/[,，]/).map(s => s.trim()).filter(Boolean),
+    review: $('#mvReview').value.trim(), rewatch: $('#mvRewatch').checked, date: todayStr() });
+  store.set('movies', list);
+  $('#mvTitle').value = ''; $('#mvTags').value = ''; $('#mvReview').value = ''; $('#mvRewatch').checked = false;
+  renderMovie(); toast('已记录 🍿');
+});
+const MV_EMOJI = { '电影':'🎬', '剧集':'📺', '纪录片':'🎥', '综艺':'🎤' };
+function renderMovie(){
+  const all = store.get('movies', []);
+  const list = all.filter(m => mvFilter === 'all' ? true : mvFilter === 'rewatch' ? m.rewatch : m.mtype === mvFilter);
+  $('#mvEmpty').hidden = list.length > 0;
+  $('#mvList').innerHTML = list.map((m, i) =>
+    '<div class="movie-card">' +
+      '<div class="movie-top" style="background:' + MV_COLORS[i % 6] + '">' +
+        '<div><div class="movie-title">' + (MV_EMOJI[m.mtype] || '🎬') + ' ' + esc(m.title) + '</div>' +
+        '<div class="movie-stars">' + '★'.repeat(m.rating) + '☆'.repeat(5 - m.rating) + '</div></div>' +
+        '<button class="del" data-id="' + m.id + '">✕</button></div>' +
+      '<div class="movie-body" style="padding-top:12px">' +
+        (m.review ? esc(m.review) : '<span style="color:var(--soft)">（还没写观后感）</span>') +
+        (m.tags.length ? '<div class="movie-tags">' + m.tags.map(t => '<span class="tag" style="background:#F5EFE6">#' + esc(t) + '</span>').join('') + '</div>' : '') +
+      '</div>' +
+      '<div class="movie-foot"><span>' + m.date + '</span>' +
+      (m.rewatch ? '<span class="rewatch">值得二刷 🔁</span>' : '<span>' + esc(m.mtype) + '</span>') + '</div>' +
+    '</div>').join('');
+}
+$('#mvList').addEventListener('click', e => {
+  const del = e.target.closest('.del'); if(!del) return;
+  store.set('movies', store.get('movies', []).filter(m => m.id !== del.dataset.id));
+  renderMovie(); toast('已删除 🗑️');
+});
+RENDER.movie = renderMovie;
+
+/* ==================== 旅行 ==================== */
+let tvFilter = 'all', tvSel = 'want';
+const TV_LABEL = { want:'🧭 想去', plan:'🗺️ 规划中', done:'🎒 已去过' };
+$('#tvFilters').addEventListener('click', e => {
+  const b = e.target.closest('.pill'); if(!b) return;
+  tvFilter = b.dataset.f;
+  $$('#tvFilters .pill').forEach(p => p.classList.toggle('active', p === b));
+  renderTravel();
+});
+$('#tvStatus').addEventListener('click', e => {
+  const b = e.target.closest('.pill'); if(!b) return;
+  tvSel = b.dataset.s;
+  $$('#tvStatus .pill').forEach(p => p.classList.toggle('active', p === b));
+});
+$('#tvAdd').addEventListener('click', () => {
+  const dest = $('#tvDest').value.trim();
+  if(!dest){ toast('先写个目的地吧 📍'); return; }
+  const list = store.get('travels', []);
+  list.unshift({ id: uid(), dest, planDate: $('#tvDate').value.trim(),
+    note: $('#tvNote').value.trim(), status: tvSel, created: todayStr() });
+  store.set('travels', list);
+  $('#tvDest').value = ''; $('#tvDate').value = ''; $('#tvNote').value = '';
+  renderTravel(); toast('已加入旅行清单 ✈️');
+});
+function renderTravel(){
+  const all = store.get('travels', []);
+  $('#tvWant').textContent = all.filter(t => t.status === 'want').length;
+  $('#tvPlan').textContent = all.filter(t => t.status === 'plan').length;
+  $('#tvDone').textContent = all.filter(t => t.status === 'done').length;
+  const list = all.filter(t => tvFilter === 'all' || t.status === tvFilter);
+  $('#tvEmpty').hidden = list.length > 0;
+  $('#tvList').innerHTML = list.map(t =>
+    '<div class="tv-card"><div class="tv-head">' +
+      '<span class="tv-dest">📍 ' + esc(t.dest) + '</span>' +
+      '<span class="badge st-' + t.status + '">' + TV_LABEL[t.status] + '</span></div>' +
+      (t.planDate ? '<div style="font-size:13px;color:var(--soft);margin-top:4px">🗓️ ' + esc(t.planDate) + '</div>' : '') +
+      (t.note ? '<div class="tv-note">' + esc(t.note) + '</div>' : '') +
+      '<div class="tv-foot"><select class="mini" data-id="' + t.id + '">' +
+        Object.keys(TV_LABEL).map(k => '<option value="' + k + '"' + (t.status === k ? ' selected' : '') + '>' + TV_LABEL[k] + '</option>').join('') +
+      '</select><button class="del" data-id="' + t.id + '">✕</button></div></div>').join('');
+}
+$('#tvList').addEventListener('change', e => {
+  const sel = e.target.closest('select.mini'); if(!sel) return;
+  const all = store.get('travels', []);
+  const t = all.find(x => x.id === sel.dataset.id);
+  if(t){ t.status = sel.value; store.set('travels', all); renderTravel(); toast('状态已更新 🧳'); }
+});
+$('#tvList').addEventListener('click', e => {
+  const del = e.target.closest('.del'); if(!del) return;
+  store.set('travels', store.get('travels', []).filter(t => t.id !== del.dataset.id));
+  renderTravel(); toast('已删除 🗑️');
+});
+RENDER.travel = renderTravel;
+
+/* ==================== 树洞 ==================== */
+$('#thAdd').addEventListener('click', () => {
+  const text = $('#thInput').value.trim();
+  if(!text){ toast('把烦恼写下来再丢进来吧 🌳'); return; }
+  const list = store.get('worries', []);
+  list.unshift({ id: uid(), date: todayStr(), text, mood: $('#thMood').value, healed: false });
+  store.set('worries', list);
+  $('#thInput').value = '';
+  renderTree(); toast('烦恼已收进树洞，会好起来的 🍃');
+});
+function renderTree(){
+  const list = store.get('worries', []);
+  $('#thEmpty').hidden = list.length > 0;
+  $('#thList').innerHTML = list.map(w =>
+    '<div class="worry-card' + (w.healed ? ' healed' : '') + '">' +
+      '<div class="entry-head"><span class="entry-date">' + w.date + ' · ' + esc(w.mood) + '</span>' +
+      (w.healed ? '<span class="badge badge-yes">已释怀 🕊️</span>' : '') + '</div>' +
+      '<div class="worry-text">' + esc(w.text) + '</div>' +
+      '<div class="modal-actions">' +
+        '<button class="mini-btn" data-heal="' + w.id + '">' + (w.healed ? '再想想 💭' : '释怀了 🕊️') + '</button>' +
+        '<button class="mini-btn" data-del="' + w.id + '">删除 🗑️</button>' +
+      '</div></div>').join('');
+}
+$('#thList').addEventListener('click', e => {
+  const heal = e.target.closest('[data-heal]');
+  const del = e.target.closest('[data-del]');
+  const list = store.get('worries', []);
+  if(heal){
+    const w = list.find(x => x.id === heal.dataset.heal);
+    if(w){ w.healed = !w.healed; store.set('worries', list); renderTree();
+      if(w.healed) toast('放下啦，给自己点个赞 🕊️'); }
+  } else if(del){
+    store.set('worries', list.filter(x => x.id !== del.dataset.del));
+    renderTree(); toast('已删除 🗑️');
+  }
+});
+RENDER.tree = renderTree;
+
+/* ==================== 数据备份 ==================== */
+const ALL_KEYS = ['todos','inspos','money','ai_notes','ai_videos','en_videos','en_dict','movies','travels','worries','checkins','home_started'];
+$('#btnExport').addEventListener('click', () => {
+  const data = {};
+  ALL_KEYS.forEach(k => { data[k] = store.get(k, k === 'home_started' ? '' : []); });
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = '惊鸿小记-备份-' + todayStr() + '.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+  toast('备份已导出 📦');
+});
+$('#btnImport').addEventListener('click', () => $('#importFile').click());
+$('#importFile').addEventListener('change', e => {
+  const file = e.target.files[0]; if(!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    try{
+      const data = JSON.parse(ev.target.result);
+      ALL_KEYS.forEach(k => { if(data[k] !== undefined) store.set(k, data[k]); });
+      const active = document.querySelector('.nav-item.active').dataset.page;
+      if(RENDER[active]) RENDER[active]();
+      toast('数据已恢复 📥');
+    }catch(err){ toast('文件格式不对，导入失败 ⚠️'); }
+  };
+  reader.readAsText(file);
+  e.target.value = '';
+});
+
+/* ==================== 启动 ==================== */
+renderHome();
+
+/* PWA：注册离线缓存（仅 http/https 环境下生效） */
+if('serviceWorker' in navigator && location.protocol.indexOf('http') === 0){
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  });
+}
+</script>
+</body>
+</html>
