@@ -1,0 +1,15 @@
+{
+  "name": "惊鸿小记 · 我的生活记录",
+  "short_name": "惊鸿小记",
+  "description": "个人生活记录工具：待办、灵感、记账、学习、影视、旅行、树洞",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#FAF6F0",
+  "theme_color": "#FF9E8A",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}
